@@ -208,26 +208,3 @@ output <- data.frame(seq(0, nrow(test_final)-1), pred)
 colnames(output) <- c("test_id", "price")
 
 write.csv(output, "prediction_xgb.csv", row.names = FALSE)
-
-##````````````````````````````````````````````````````````````````
-train_rf <- data.frame(target_log, train_1)
-library(randomForest)
-model <- randomForest(target_log~., data = train_rf, mtry = 7, ntree = 200, importance = TRUE)
-
-##````````````````````````````````````````````````````````````````
-options(repr.plot.width=7, repr.plot.height=7)
-mercari %>% group_by(cat1, cat2) %>% 
-  count() %>% ungroup() %>% 
-  ggplot(aes(area = n, fill = cat1, label = cat2, subgroup = cat1)) + 
-  geom_treemap() + 
-  ggtitle("Hierarchy of 1st and 2nd order categories") + 
-  geom_treemap_subgroup_text(min.size = 0, grow = T, alpha = 0.5, colour = "black", fontface = "italic") + 
-  geom_treemap_text(colour = "white", place = "topleft", reflow = T) + theme(legend.position = "null")
-
-
-mercari %>% group_by(cat2, cat3) %>% 
-  count() %>% ungroup() %>% 
-  ggplot(aes(area = n, fill = cat2, label = cat3, subgroup = cat2)) + geom_treemap() +
-  ggtitle("Hierarchy of 2nd and 3rd order categories") + 
-  geom_treemap_subgroup_text(min.size = 0, grow = T, alpha = 0.5, colour = "black", fontface = "italic") + 
-  geom_treemap_text(colour = "white", place = "topleft", reflow = T) + theme(legend.position = "null")
